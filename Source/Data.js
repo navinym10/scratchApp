@@ -61,7 +61,7 @@ export const Code = [
             {
                 id: 2,
                 type: 'controls',
-                move: 'Wait for 10 seconds.',
+                move: 'Reduce size by 10',
             },
         ]
     },
@@ -73,7 +73,7 @@ export const Code = [
             {
                 id: 0,
                 type: 'events',
-                move: 'Glide to x:-159 y:180',
+                move: 'Glide from x:0 y:100',
             },
             {
                 id: 1,

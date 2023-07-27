@@ -6,7 +6,7 @@ import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-
 import Animated, { useAnimatedGestureHandler, useSharedValue, useAnimatedStyle, withTiming } from 'react-native-reanimated'
 
 //images
-import { actionIcon, catIcon, catIcon2, codeIcon, playIcon, resetIcon, scratchIcon, speechBubble } from '../Assets/images'
+import { actionIcon, addIcon, cancelIcon, catIcon, catIcon2, codeIcon, manIcon, manIcon2, playIcon, resetIcon, scratchIcon, speechBubble } from '../Assets/images'
 
 //codeData
 import { Code } from '../Data'
@@ -20,6 +20,7 @@ const HomeScreen = () => {
     const [costume, setCostume] = useState(false)
     const [size, setSize] = useState(75)
     const [animation, setAnimation] = useState(false)
+    const [addSpirit, setAddSpirit] = useState(false)
 
 
     //initial values
@@ -40,9 +41,6 @@ const HomeScreen = () => {
             translateY.value = event.translationY + context.translateY
         },
         onEnd: () => {
-            console.log("----------")
-            console.log(translateX.value, "x")
-            console.log(translateY.value, "y")
             if (translateY.value > 170 || translateX.value > 215) {
                 translateX.value = 0
                 translateY.value = 0
@@ -132,6 +130,7 @@ const HomeScreen = () => {
                         } else if (code1.type == 'controls') {
                             setClone(false)
                         } else if (code1.type = 'events') {
+                            setCostume(!costume)
                         }
                     }}
                     activeOpacity={0.5}
@@ -147,8 +146,9 @@ const HomeScreen = () => {
                         } else if (code1.type == 'looks') {
                             setSize(size + 10)
                         } else if (code1.type == 'controls') {
-                            setClone(false)
+                            setSize(size - 10)
                         } else if (code1.type = 'events') {
+                            setSize(size - 10)
                         }
                     }}
                     activeOpacity={0.5}
@@ -205,13 +205,25 @@ const HomeScreen = () => {
 
                             <Animated.View style={animation ? animatedStyle : panAnimation} >
 
-                                {clone ? <Image style={{ height: size, width: size }} source={catIcon} /> : null}
+                                {clone ? (
+                                    <View>
+                                        <Image style={{ height: size, width: size }} source={costume ? catIcon2 : catIcon} />
+                                        {addSpirit ? <Image style={{ height: size, width: size }} source={costume ? manIcon2 : manIcon} /> : null}
+                                    </View>
+                                )
+                                    : null
+                                }
 
                                 <Image style={{ height: size, width: size }} source={costume ? catIcon2 : catIcon} />
+                                {addSpirit ? <Image style={{ height: size, width: size }} source={costume ? manIcon2 : manIcon} /> : null}
 
-                                {greet ? <ImageBackground style={{ alignItems: 'center', justifyContent: 'center', width: 32, height: 32, zIndex: 1, marginTop: -70, right: -65 }} source={speechBubble} >
-                                    <Text style={{ color: 'white', fontSize: 10 }} >Hi</Text>
-                                </ImageBackground> : null}
+                                {greet ?
+                                    <ImageBackground style={{ alignItems: 'center', justifyContent: 'center', width: 32, height: 32, zIndex: 1, marginTop: -70, right: -65 }} source={speechBubble} >
+                                        <Text style={{ color: 'white', fontSize: 10 }} >Hi</Text>
+                                    </ImageBackground>
+                                    :
+                                    null
+                                }
 
                             </Animated.View>
 
@@ -220,9 +232,9 @@ const HomeScreen = () => {
                     </View>
 
                     {/* panResponder desc */}
-                    <View style={{ backgroundColor: 'white', height: '15%', borderRadius: 5, borderWidth: 1, borderColor: 'grey', justifyContent: "center", marginTop: 5 }}>
+                    <View style={{ backgroundColor: 'white', height: '15%', borderRadius: 5, borderWidth: 1, borderColor: 'grey', justifyContent: "center", marginTop: 5, }}>
 
-                        <View style={{ flexDirection: "row", alignItems: 'center' }} >
+                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-evenly' }} >
 
                             <TouchableOpacity
                                 onPress={handleReset}
@@ -231,12 +243,25 @@ const HomeScreen = () => {
                                 <Image source={resetIcon} />
                             </TouchableOpacity>
 
-                            <TouchableOpacity
-                                onPress={handlePlay}
-                                activeOpacity={0.5}
-                                style={{ width: 33, height: 33, alignItems: 'center', justifyContent: 'center', marginStart: 10 }}>
-                                <Image source={playIcon} />
-                            </TouchableOpacity>
+                            <View style={{ alignItems: 'center', justifyContent: "center", flexDirection: 'column' }} >
+                                <Text style={{ letterSpacing: 0.5, lineHeight: 16, fontWeight: 'bold', marginStart: 5, color: 'black', fontSize: 10 }} >Spirit 1</Text>
+                                <View style={{ width: 33, height: 33, alignItems: 'center', justifyContent: 'center', marginStart: 10 }}>
+                                    <Image style={{ height: 30, width: 30 }} source={catIcon} />
+                                </View>
+                            </View>
+
+                            <View style={{ alignItems: 'center', justifyContent: "center", flexDirection: 'column' }} >
+                                <Text style={{ letterSpacing: 0.5, lineHeight: 16, fontWeight: 'bold', marginStart: 5, color: 'black', fontSize: 10 }} >Spirit 2</Text>
+                                <TouchableOpacity
+                                    onPress={() => { setAddSpirit(!addSpirit) }}
+                                    activeOpacity={0.5}
+                                    style={{ width: 33, height: 33, alignItems: 'center', justifyContent: 'center', marginStart: 10 }}>
+                                    <Image style={{ height: 28, width: 28 }} source={addSpirit ? manIcon : addIcon} />
+                                    <Image style={{ height: 18, width: 18, zIndex: 1, right: -5, position: 'absolute', bottom: 15 }} source={addSpirit ? cancelIcon : null} />
+                                </TouchableOpacity>
+                            </View>
+
+                            <Image style={{ width: 35, height: 35 }} source={scratchIcon} />
 
                         </View>
 

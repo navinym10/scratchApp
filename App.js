@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View, Text, StatusBar } from 'react-native'
 import React from 'react'
 
 //navigation
@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator();
 const App = () => {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{ headerShown: false, orientation: 'landscape' }} >
                 <Stack.Screen name="SplashScreen" component={SplashScreen} />
                 <Stack.Screen name="HomeScreen" component={HomeScreen} />
             </Stack.Navigator>

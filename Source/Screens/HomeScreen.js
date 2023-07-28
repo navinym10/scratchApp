@@ -1,5 +1,5 @@
-import { View, Text, StatusBar, TouchableOpacity, Image, ToastAndroid, FlatList, ImageBackground } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, StatusBar, TouchableOpacity, Image, BackHandler, Alert, FlatList, ImageBackground } from 'react-native'
+import React, { useState, useEffect } from 'react'
 
 //PanResponder
 import { GestureHandlerRootView, PanGestureHandler } from 'react-native-gesture-handler'
@@ -21,7 +21,31 @@ const HomeScreen = () => {
     const [size, setSize] = useState(75)
     const [animation, setAnimation] = useState(false)
     const [addSpirit, setAddSpirit] = useState(false)
+    const [changeColor, setChangeColor] = useState(false)
 
+    //hardware backPress
+    useEffect(() => {
+        const backAction = () => {
+            Alert.alert('Hold on!', 'Are you sure you want to exit Scratch?', [
+                {
+                    text: 'Cancel',
+                    onPress: () => null,
+                    style: 'cancel',
+                },
+                { text: 'YES', onPress: () => BackHandler.exitApp() },
+            ]);
+            return true;
+        };
+
+        const backHandler = BackHandler.addEventListener(
+            'hardwareBackPress',
+            backAction,
+        );
+
+        return () => backHandler.remove();
+    }, []);
+
+    var colorCode = 'rgb(' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ',' + (Math.floor(Math.random() * 256)) + ')'
 
     //initial values
     const translateX = useSharedValue(0)
@@ -78,15 +102,11 @@ const HomeScreen = () => {
         translateX.value = 0
         translateY.value = 0
         rotate.value = 0
+        animatedValue.value = 0
         setSize(75)
         setAnimation(false)
-        animatedValue.value = 0
-    }
-
-
-    //playButton
-    const handlePlay = () => {
-        ToastAndroid.show('Please select actions', ToastAndroid.SHORT)
+        setChangeColor(false)
+        setClone(false)
     }
 
 
@@ -148,7 +168,7 @@ const HomeScreen = () => {
                         } else if (code1.type == 'controls') {
                             setSize(size - 10)
                         } else if (code1.type = 'events') {
-                            setSize(size - 10)
+                            setChangeColor(!changeColor)
                         }
                     }}
                     activeOpacity={0.5}
@@ -199,7 +219,7 @@ const HomeScreen = () => {
                 <View style={{ flexDirection: 'column', width: '50%', justifyContent: "space-evenly" }}>
 
                     {/* view for panResponder */}
-                    <View style={{ backgroundColor: 'white', height: '78%', borderRadius: 5, borderWidth: 1, borderColor: 'grey', alignItems: 'center', justifyContent: 'center', }}>
+                    <View style={{ backgroundColor: changeColor ? colorCode : 'white', height: '78%', borderRadius: 5, borderWidth: 1, borderColor: 'grey', alignItems: 'center', justifyContent: 'center', }}>
 
                         <PanGestureHandler onGestureEvent={panGestureEvent}>
 
